@@ -13,9 +13,8 @@ import 'next-leaflet-cluster/lib/assets/marker-icon.png'
 import 'next-leaflet-cluster/lib/assets/marker-shadow.png'
 
 import { Property } from '../../models/property.model';
-import L from 'leaflet';
 import { useMapContext } from '@/contexts/mapdata/useMapContext';
-const icon = L.icon({ iconUrl: "/images/marker-icon.png" });
+import PropertyMarker from './PropertyMarker';
 const LeafletMap = () => {
     
     const {data} = useMapContext();
@@ -32,11 +31,7 @@ const LeafletMap = () => {
             {data ? data?.map((property: Property) => {
                 // return null
                 return (
-                    <Marker position={[property.latitude ?? 0, property.longitude ?? 0]} icon={icon}>
-                        <Popup>
-                            {JSON.stringify(property)}
-                        </Popup>
-                    </Marker>
+                    <PropertyMarker property={property}/>
                 );
             }) : null}
             {/* <Marker position={[51.505, -0.09]} >
