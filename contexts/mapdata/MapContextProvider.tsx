@@ -23,6 +23,10 @@ export const MapContextProvider = ({ children }: MapContextProviderProps) => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        console.log('selected Property change', selectedProperty)
+    }, [selectedProperty])
+
     const value: MapContextData = {
         data,
         selectedProperty,

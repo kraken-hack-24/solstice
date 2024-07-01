@@ -18,7 +18,7 @@ const PropertyMarker = ({ property }: PropertyMarkerProps) => {
                 click: (e) => {
                     console.log('marker clicked', e)
                     setSelectedProperty(property)
-                    alert(`${property.address_1} clicked`)
+                    // alert(`${property.address_1} clicked`)
 
                     // set selected = property.id
                 },

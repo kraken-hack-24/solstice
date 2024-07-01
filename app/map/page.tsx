@@ -4,19 +4,30 @@ import { MapContextProvider } from '@/contexts/mapdata/MapContextProvider';
 import { useMapContext } from '@/contexts/mapdata/useMapContext';
 import LeafletMap from './components/LeafletMap';
 import { Property } from '../models/property.model';
+import PropertyPanel from './components/PropertyPanel';
 
 const MapPage = () => {
-    // const [data, setData] = useState();
+    const { selectedProperty } = useMapContext();
 
+    const selectedProp = () => {
+        if (!selectedProperty) {
+            return null;
+        }
 
-    // if (!data) {
-    //     return (<p>Loading...</p>);
-    // }
+        return (
+            <div>
+               <PropertyPanel property={selectedProperty}/> 
+            </div>
+        )
+    }
 
     return (
         <MapContextProvider>
-            <LeafletMap></LeafletMap>
-        </MapContextProvider>  
+            <>
+                <LeafletMap></LeafletMap>
+                {selectedProp()}
+            </>
+        </MapContextProvider>
     );
 }
 
