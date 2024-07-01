@@ -11,7 +11,7 @@ enum TenureEnum {
   FREEHOLD = "freehold",
 }
 
-interface Property {
+export interface Property {
   uprn: string;
   address_1: string;
   address_2: string;
@@ -22,11 +22,10 @@ interface Property {
   floor_area: number;
   building_level: number;
   main_heating_fuel: string;
-  county: string;
   title_number: string;
   tenure: TenureEnum;
   company_registration_number: string;
-  roof_surface: number;
+  total_roof_surface_area: number;
   annual_energy_usage: number;
   latitude: number;
   longitude: number;
@@ -45,7 +44,7 @@ const propertySchema = new mongoose.Schema<PropertyDocument>(
   {
     uprn: {
       type: String,
-      required: true,
+      required: false,
     },
     address_1: {
       type: String,
@@ -65,72 +64,68 @@ const propertySchema = new mongoose.Schema<PropertyDocument>(
     },
     asset_rating: {
       type: Number,
-      required: true,
+      required: false,
     },
     asset_rating_band: {
       type: String,
-      required: true,
+      required: false,
     },
     floor_area: {
       type: Number,
-      required: true,
+      required: false,
     },
     building_level: {
       type: Number,
-      required: true,
+      required: false,
     },
     main_heating_fuel: {
       type: String,
-      required: true,
-    },
-    county: {
-      type: String,
-      required: true,
+      required: false,
     },
     title_number: {
       type: String,
-      required: true,
+      required: false,
     },
     tenure: {
       type: String,
-      required: true,
+      required: false,
     },
     company_registration_number: {
       type: String,
-      required: true,
+      required: false,
     },
-    roof_surface: {
+    total_roof_surface_area: {
       type: Number,
-      required: true,
+      required: false,
     },
-    annual_energy_usage: {
-      type: Number,
-      required: true,
-    },
+    // annual_energy_usage: {
+    //   type: Number,
+    //   required: false,
+    // },
     latitude: {
       type: Number,
-      required: true,
+      required: false,
     },
     longitude: {
       type: Number,
-      required: true,
+      required: false,
     },
     building_emissions: {
       type: Number,
-      required: true,
+      required: false,
     },
     yield_potential: {
       type: Number,
-      required: true,
+      required: false,
     },
-    dno_substation_status: {
-      type: String,
-      required: true,
-    },
-    potential_energy_savings: {
-      type: Number,
-      required: true,
-    },
+    // dno_substation_status: {
+    //   type: String,
+    //   required: false,
+    // },
+    // potential_energy_savings: {
+    //   type: Number,
+    //   required: false,
+    // },
   },
   {
     timestamps: true,
