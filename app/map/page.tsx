@@ -9,25 +9,24 @@ import PropertyPanel from './components/PropertyPanel';
 const MapPage = () => {
     const { selectedProperty } = useMapContext();
 
-    const selectedProp = () => {
+    const renderSelectedProp = () => {
         if (!selectedProperty) {
-            return null;
+            return  <p>No property selected</p>;
         }
 
         return (
-            <div>
-               <PropertyPanel property={selectedProperty}/> 
-            </div>
+            <PropertyPanel property={selectedProperty}/>
         )
     }
 
     return (
-        <MapContextProvider>
+
             <>
                 <LeafletMap></LeafletMap>
-                {selectedProp()}
+
+                {renderSelectedProp()}
+
             </>
-        </MapContextProvider>
     );
 }
 

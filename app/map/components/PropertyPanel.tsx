@@ -16,7 +16,6 @@ const PropertyPanel = ({ property }: PropertyPanelProps) => {
                     <p className="text-sm mb-1"><span className="font-bold">Address 2:</span> {property.address_2}</p>
                     <p className="text-sm mb-1"><span className="font-bold">Address 3:</span> {property.address_3}</p>
                     <p className="text-sm mb-1"><span className="font-bold">Postcode:</span> {property.postcode}</p>
-                    <p className="text-sm mb-1"><span className="font-bold">County:</span> {property.county}</p>
                 </div>
                 <div>
                     <h3 className="font-semibold mb-2">Property Info</h3>
@@ -25,11 +24,10 @@ const PropertyPanel = ({ property }: PropertyPanelProps) => {
                     <p className="text-sm mb-1"><span className="font-bold">Building Level:</span> {property.building_level}</p>
                     <p className="text-sm mb-1"><span className="font-bold">Main Heating Fuel:</span> {property.main_heating_fuel}</p>
                     <p className="text-sm mb-1"><span className="font-bold">Title Number:</span> {property.title_number}</p>
-                    <p className="text-sm mb-1"><span className="font-bold">Tenure:</span> {property.tenure}</p>
                 </div>
                 <div>
                     <h3 className="font-semibold mb-2">Energy & Emissions</h3>
-                    <p className="text-sm mb-1"><span className="font-bold">Roof Surface:</span> {property.roof_surface} sqm</p>
+                    <p className="text-sm mb-1"><span className="font-bold">Roof Surface:</span> {property.floor_area} sqm</p>
                     <p className="text-sm mb-1"><span className="font-bold">Annual Energy Usage:</span> {property.annual_energy_usage} kWh</p>
                     <p className="text-sm mb-1"><span className="font-bold">Building Emissions:</span> {property.building_emissions} kg CO2</p>
                     <p className="text-sm mb-1"><span className="font-bold">Potential Energy Savings:</span> {property.potential_energy_savings} kWh</p>

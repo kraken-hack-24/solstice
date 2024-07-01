@@ -24,9 +24,9 @@ const PropertyMarker = ({ property }: PropertyMarkerProps) => {
                 },
             }}
         >
-            <Popup>
+            {/* <Popup>
                 {JSON.stringify(property)}
-            </Popup>
+            </Popup> */}
         </Marker>
     );
 }
