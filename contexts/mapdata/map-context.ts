@@ -4,7 +4,7 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 
 export type MapContextData = {
     data: Property[] | undefined;
-    setData: Dispatch<SetStateAction<Property[] | undefined>> | undefined;
+    setData: Dispatch<SetStateAction<Property[]>> | undefined;
 };
 
 export const MapContext = createContext<MapContextData>({
