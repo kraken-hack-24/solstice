@@ -12,12 +12,16 @@
     "csv-parser": "^3.0.0",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.4",
+    "leaflet": "^1.9.4",
+    "leaflet-defaulticon-compatibility": "^0.1.2",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "stream": "^0.0.3"
+    "stream": "^0.0.3",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.12",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
