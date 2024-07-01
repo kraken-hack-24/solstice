@@ -8,22 +8,25 @@ type MapContextProviderProps = {
 
 export const MapContextProvider = ({ children }: MapContextProviderProps) => {
     const [data, setData] = useState<Property[] | undefined>();
+    const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
 
     useEffect(() => {
         async function fetchData() {
             console.log('fetching data')
-          const response = await fetch('/api/property');
-          const result = await response.json();
-          console.log('Data', result)
-          setData(result);
+            const response = await fetch('/api/property');
+            const result = await response.json();
+            console.log('Data', result)
+            setData(result);
         }
         console.log('use effect')
-        
+
         fetchData();
     }, []);
 
     const value: MapContextData = {
-        data
+        data,
+        selectedProperty,
+        setSelectedProperty
     };
 
     return <MapContext.Provider value={value}>{children}</MapContext.Provider>;
