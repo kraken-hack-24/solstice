@@ -42,8 +42,9 @@ export default function RootLayout({
                     </li>
 
                   </ul> */}
+                    <h3 className="font-semibold text-sm">Properties</h3>
+                    <hr className="my-2 bg-slate-500"></hr>
 
-                
                   <PropertyList/>
                 </nav>
               </div>
