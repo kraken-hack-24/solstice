@@ -15,11 +15,13 @@ const PropertyMarker = ({ property }: PropertyMarkerProps) => {
     const {selectedProperty, setSelectedProperty, map} = useMapContext();
 
     function getMarkerIcon() {
-        if(property?.address_1 && (selectedProperty?.address_1 === property.address_1)) {
+        if(selectedProperty?._id === property._id) {
             return lIconXl
         }
         return lIcon
       }
+
+      
     
     return (
         <Marker position={[property.latitude ?? 0, property.longitude ?? 0]} 
@@ -28,7 +30,9 @@ const PropertyMarker = ({ property }: PropertyMarkerProps) => {
                 click: (e) => {
                     console.log('marker clicked', e)
                     setSelectedProperty(property)
-                    map?.setView([property.latitude, property.longitude], 16)
+                    map?.setView([property.latitude, property.longitude], 18)
+                    const section = document.getElementById( `#${property._id}` );
+                    section.scrollIntoView( { behavior: 'smooth', block: 'start' } );
                     // alert(`${property.address_1} clicked`)
 
                     // set selected = property.id

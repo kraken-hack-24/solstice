@@ -10,7 +10,7 @@ let GBP = new Intl.NumberFormat('en-GB', {
 const PropertySideCard = ({ property }: { property: Property }) => {
   const {setSelectedProperty, selectedProperty, map} = useMapContext();
 
-    const selectedClass = property.address_1 === selectedProperty?.address_1 ? 'text-white group flex flex-col gap-y-2 rounded-md p-4 text-sm font-semibold leading-6 bg-gray-700 border-white border transition ' : 'bg-gray-800 text-white group flex flex-col gap-y-2 rounded-md p-4 text-sm font-semibold leading-6 hover:bg-gray-700 transition'
+    const selectedClass = property._id === selectedProperty?._id ? 'text-white group flex flex-col gap-y-2 rounded-md p-4 text-sm font-semibold leading-6 bg-gray-700 border-white border transition ' : 'bg-gray-800 text-white group flex flex-col gap-y-2 rounded-md p-4 text-sm font-semibold leading-6 hover:bg-gray-700 transition'
 
     if (!property.address_1) {
         return null;
@@ -18,7 +18,7 @@ const PropertySideCard = ({ property }: { property: Property }) => {
 
 
     return (
-        <li className="py-1" id={`#${property.address_1}`}>
+        <li className="py-1" id={`#${property._id}`}>
             <a
                 href={'#'}
                 onClick={() => {
