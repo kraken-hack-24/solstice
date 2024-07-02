@@ -18,7 +18,7 @@ const PropertySideCard = ({ property }: { property: Property }) => {
 
 
     return (
-        <li className="py-1">
+        <li className="py-1" id={`#${property.address_1}`}>
             <a
                 href={'#'}
                 onClick={() => {
