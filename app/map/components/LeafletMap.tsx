@@ -34,11 +34,6 @@ const LeafletMap = () => {
                     <PropertyMarker property={property}/>
                 );
             }) : null}
-            {/* <Marker position={[51.505, -0.09]} >
-                <Popup>
-                    A Property
-                </Popup>
-            </Marker> */}
             </MarkerClusterGroup>
         </MapContainer>
     );

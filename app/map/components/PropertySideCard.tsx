@@ -2,6 +2,11 @@ import { Property } from "@/app/models/property.model";
 import { useMapContext } from "@/contexts/mapdata/useMapContext";
 import { BuildingOfficeIcon, MapIcon } from "@heroicons/react/24/outline";
 
+let GBP = new Intl.NumberFormat('en-GB', {
+  style: 'currency',
+  currency: 'GBP',
+});
+
 const PropertySideCard = ({ property }: { property: Property }) => {
   const {setSelectedProperty, selectedProperty} = useMapContext();
 
@@ -24,8 +29,8 @@ const PropertySideCard = ({ property }: { property: Property }) => {
                     <span>{property.address_1}</span>
                 </div>
                 <div className="flex justify-between flex-1 flex-col mt-2">
-                    <span className="text-green-400">Energy Savings: {property.potential_energy_savings ?? "£?"}</span>
-                    <span className="text-gray-400">Company {property.company_registration_number}</span>
+                    <span className="text-green-400">Energy Savings: {GBP.format(property.optimal_savings) ?? "?"}</span>
+                    <span className="text-gray-400">{property.company_name}</span>
                 </div>
             </a>
         </li>
