@@ -11,13 +11,14 @@ const lIcon = icon({ iconUrl: "/images/marker-icon.png" });
 
 
 const PropertyMarker = ({ property }: PropertyMarkerProps) => {
-    const {setSelectedProperty} = useMapContext();
+    const {setSelectedProperty, map} = useMapContext();
     return (
         <Marker position={[property.latitude ?? 0, property.longitude ?? 0]} icon={lIcon}
             eventHandlers={{
                 click: (e) => {
                     console.log('marker clicked', e)
                     setSelectedProperty(property)
+                    map?.setView([property.latitude, property.longitude], 16)
                     // alert(`${property.address_1} clicked`)
 
                     // set selected = property.id

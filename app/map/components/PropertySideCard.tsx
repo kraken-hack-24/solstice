@@ -8,7 +8,7 @@ let GBP = new Intl.NumberFormat('en-GB', {
 });
 
 const PropertySideCard = ({ property }: { property: Property }) => {
-  const {setSelectedProperty, selectedProperty} = useMapContext();
+  const {setSelectedProperty, selectedProperty, map} = useMapContext();
 
     const selectedClass = property.address_1 === selectedProperty?.address_1 ? 'text-white group flex flex-col gap-y-2 rounded-md p-4 text-sm font-semibold leading-6 bg-gray-700 border-white border transition ' : 'bg-gray-800 text-white group flex flex-col gap-y-2 rounded-md p-4 text-sm font-semibold leading-6 hover:bg-gray-700 transition'
 
@@ -21,7 +21,11 @@ const PropertySideCard = ({ property }: { property: Property }) => {
         <li className="py-1">
             <a
                 href={'#'}
-                onClick={() => setSelectedProperty(property)}
+                onClick={() => {
+                    setSelectedProperty(property)
+                    map?.setView([property.latitude, property.longitude], 18)
+
+                }}
                 className={selectedClass}
             >
                 <div className="flex gap-x-3 items-center">
