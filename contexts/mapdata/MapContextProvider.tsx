@@ -17,6 +17,13 @@ export const MapContextProvider = ({ children }: MapContextProviderProps) => {
             const response = await fetch('/api/property');
             const result = await response.json();
             console.log('Data', result)
+
+            // order data by energy saving
+            
+            if (result) {
+                result.sort((a: Property,b: Property) => b.optimal_savings - a.optimal_savings);
+            }
+
             setData(result);
         }
         console.log('use effect')
