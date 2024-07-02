@@ -2,7 +2,7 @@ import { Property } from "@/app/models/property.model";
 import { useMapContext } from "@/contexts/mapdata/useMapContext";
 import { BuildingOfficeIcon, MapIcon } from "@heroicons/react/24/outline";
 
-let GBP = new Intl.NumberFormat('en-GB', {
+export const GBP = new Intl.NumberFormat('en-GB', {
   style: 'currency',
   currency: 'GBP',
 });
