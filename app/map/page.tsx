@@ -5,29 +5,24 @@ import { useMapContext } from '@/contexts/mapdata/useMapContext';
 import LeafletMap from './components/LeafletMap';
 import { Property } from '../models/property.model';
 import PropertyPanel from './components/PropertyPanel';
+import { HomeIcon } from '@heroicons/react/24/outline';
+import PropertyPanelEmpty from './components/PropertyPanelEmpty';
 
 const MapPage = () => {
     const { selectedProperty } = useMapContext();
 
-    const renderSelectedProp = () => {
-        if (!selectedProperty) {
-            return  <p>No property selected</p>;
-        }
-
-        return (
-            <PropertyPanel property={selectedProperty}/>
-        )
-    }
-
     return (
+        <>
+            <LeafletMap></LeafletMap>
 
-            <>
-                <LeafletMap></LeafletMap>
-
-                {renderSelectedProp()}
-
-            </>
+            <div className='my-2'>
+                {selectedProperty ? <PropertyPanel property={selectedProperty} /> : <PropertyPanelEmpty />}
+            </div>
+        </>
     );
 }
+
+
+
 
 export default MapPage;
