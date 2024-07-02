@@ -1,5 +1,5 @@
 "use server";
-import PropertyModel from "../../models/property.model";
+import PropertyModel, { Property } from "../../models/property.model";
 import { connectToMongoDB } from "../../libs/mongodb.lib";
 import { NextResponse } from "next/server";
 import https from "https";
@@ -14,7 +14,7 @@ type LatLng = {
 
 type BuildingInsightsRequest = LatLng & {};
 
-export type Coordinate = {
+type Coordinate = {
   latitude: number;
   longitude: number;
 };
@@ -94,6 +94,9 @@ interface ICenter {
 
 const imageQualities = ["HIGH", "MEDIUM", "LOW"];
 
+const IMPORT_TARIFF = 0.25;
+const EXPORT_TARIFF = 0.07;
+
 /**
  *
  */
@@ -105,19 +108,16 @@ export const POST = async () => {
     const buffer = await getBufferFromFile();
     const csvData = await getCsvContent(buffer);
     const structuredList = await structurePropertyCsvData(csvData);
-    console.log(structuredList, "HERE IN POST");
 
     const paginatedData = paginateArray(structuredList, pageSize);
 
     for (let page = 0; page < paginatedData.length; page++) {
       const currentPage = paginatedData[page];
-      console.log(currentPage, "CURR PAGE");
-
       await PropertyModel.insertMany(currentPage);
       console.info(`[ MERGED DATA ] Page finished: ${page}`);
     }
 
-    return NextResponse.json({ status: 200 });
+    return NextResponse.json(structuredList, { status: 200 });
   } catch (err) {
     console.error(err);
     return NextResponse.json(
@@ -199,7 +199,7 @@ const getCoordinates = (postal_code: string): any => {
 const getBufferFromFile = async () => {
   console.log(process.cwd(), "HERE");
   const buffer = await fs.readFile(
-    "/Users/wwwhatley/Developer/kraken/solstice/public/merged_data_sample.csv"
+    "/Users/wwwhatley/Developer/kraken/solstice/public/merged_data_1.csv"
   );
   return buffer;
 };
@@ -228,6 +228,9 @@ const getCsvContent = async (buffer: Buffer): Promise<any[]> => {
           tenure: row["Tenure"],
           company_registration_number: row["Company Registration No. (1)"],
           building_emissions: row["BUILDING_EMISSIONS"],
+          annual_energy_usage: row["Consumption (kWh)"],
+          industry: row["Ofgem industry"],
+          company_name: row["Proprietor Name (1)"],
         });
       })
       .on("end", () => {
@@ -243,39 +246,84 @@ const getCsvContent = async (buffer: Buffer): Promise<any[]> => {
 
 const structurePropertyCsvData = async (properties: any[]) => {
   const data = await Promise.all(
-    properties.map(async (key) => {
-      const geocode_response = await getCoordinates(key.postcode);
+    properties.map(async (key: Partial<Property>) => {
+      const geocode_response = await getCoordinates(key.postcode as string);
 
       if (!geocode_response || geocode_response.status === "ZERO_RESULTS")
-        return null;
+        return;
+
+      console.log(key.postcode, geocode_response, "HERE");
 
       const coordinates: LatLng =
         geocode_response?.results[0]?.geometry?.location;
 
-      if (!coordinates) return null;
+      if (!coordinates) return;
 
       const solarData = await getBuildingInsights({
         lat: coordinates.lat,
         lng: coordinates.lng,
       });
 
-      if (!solarData) return null;
+      if (
+        solarData &&
+        solarData.solarPotential &&
+        solarData.solarPotential.solarPanelConfigs &&
+        solarData.solarPotential.solarPanelConfigs.length > 0
+      ) {
+        const full_roof_panel_config_object =
+          solarData?.solarPotential?.solarPanelConfigs.pop();
 
-      const full_roof_panel_config_object =
-        solarData?.solarPotential?.solarPanelConfigs.pop();
-      const yield_potential = full_roof_panel_config_object?.yearlyEnergyDcKwh;
+        // FULL ROOF
 
-      return {
-        ...key,
-        total_roof_surface_area:
-          solarData?.solarPotential?.wholeRoofStats?.areaMeters2,
-        max_installable_surface_area:
-          solarData?.solarPotential?.maxArrayAreaMeters2,
-        max_panel_count: solarData?.solarPotential.maxArrayPanelsCount,
-        latitude: solarData?.center?.latitude,
-        longitude: solarData?.center?.longitude,
-        yield_potential,
-      };
+        const full_roof_panel_count =
+          solarData?.solarPotential.maxArrayPanelsCount || 0;
+
+        const full_roof_generation_potential =
+          full_roof_panel_config_object?.yearlyEnergyDcKwh as number;
+
+        const full_roof_panel_capacity = full_roof_panel_count * 0.4;
+
+        // SPECIFIC YIELD
+
+        const specific_yield =
+          full_roof_generation_potential / full_roof_panel_capacity;
+
+        // TARGET GENERATION. This assumes we are targeting 70% self consumption and have a standard commercial load profile + solar generation profile
+
+        const target_generation = (key.annual_energy_usage as number) / 1.5;
+
+        let optimal_generation: number = 0;
+        let optimal_capacity: number = 0;
+        let optimal_savings: number = 0;
+
+        if (target_generation >= full_roof_generation_potential) {
+          optimal_generation = full_roof_generation_potential;
+          optimal_capacity = full_roof_panel_capacity;
+        } else {
+          optimal_generation = target_generation;
+          optimal_capacity = optimal_generation / specific_yield;
+        }
+
+        // SAVINGS. As above this assumes we are targeting 70% self consumption
+
+        optimal_savings =
+          optimal_generation * (0.7 * IMPORT_TARIFF + 0.3 * EXPORT_TARIFF);
+
+        return {
+          ...key,
+          total_roof_surface_area:
+            solarData?.solarPotential?.wholeRoofStats?.areaMeters2,
+          max_installable_surface_area:
+            solarData?.solarPotential?.maxArrayAreaMeters2,
+          max_panel_count: full_roof_panel_count,
+          latitude: solarData?.center?.latitude,
+          longitude: solarData?.center?.longitude,
+          yield_potential: full_roof_generation_potential,
+          optimal_generation,
+          optimal_capacity,
+          optimal_savings,
+        };
+      }
     })
   );
 
