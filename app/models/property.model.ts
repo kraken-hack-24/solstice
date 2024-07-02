@@ -33,6 +33,11 @@ export interface Property {
   yield_potential: number;
   dno_substation_status: DnoSubstationStatusEnum;
   potential_energy_savings: number;
+  industry: string;
+  optimal_generation: number;
+  optimal_capacity: number;
+  optimal_savings: number;
+  company_name: string;
 }
 
 export interface PropertyDocument extends Property, Document {
@@ -48,7 +53,7 @@ const propertySchema = new mongoose.Schema<PropertyDocument>(
     },
     address_1: {
       type: String,
-      required: true,
+      required: false,
     },
     address_2: {
       type: String,
@@ -60,7 +65,7 @@ const propertySchema = new mongoose.Schema<PropertyDocument>(
     },
     postcode: {
       type: String,
-      required: true,
+      required: false,
     },
     asset_rating: {
       type: Number,
@@ -98,10 +103,10 @@ const propertySchema = new mongoose.Schema<PropertyDocument>(
       type: Number,
       required: false,
     },
-    // annual_energy_usage: {
-    //   type: Number,
-    //   required: false,
-    // },
+    annual_energy_usage: {
+      type: Number,
+      required: false,
+    },
     latitude: {
       type: Number,
       required: false,
@@ -118,14 +123,26 @@ const propertySchema = new mongoose.Schema<PropertyDocument>(
       type: Number,
       required: false,
     },
-    // dno_substation_status: {
-    //   type: String,
-    //   required: false,
-    // },
-    // potential_energy_savings: {
-    //   type: Number,
-    //   required: false,
-    // },
+    industry: {
+      type: String,
+      required: false,
+    },
+    optimal_capacity: {
+      type: Number,
+      required: false,
+    },
+    optimal_generation: {
+      type: Number,
+      required: false,
+    },
+    optimal_savings: {
+      type: Number,
+      required: false,
+    },
+    company_name: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
